@@ -68,6 +68,22 @@ describe('optional provider access', () => {
       },
     });
     expect(OPTIONAL_PROVIDER_CONFIGS.yuanbao.frameRule).toBeUndefined();
+    expect(OPTIONAL_PROVIDER_CONFIGS['meta-ai']).toMatchObject({
+      origins: ['https://meta.ai/*'],
+      contentScript: {
+        id: 'meta-ai-scripts',
+        matches: ['https://meta.ai/*'],
+      },
+      frameRule: { id: 1005 },
+    });
+    expect(OPTIONAL_PROVIDER_CONFIGS.copilot).toMatchObject({
+      origins: ['https://copilot.cloud.microsoft/*'],
+      contentScript: {
+        id: 'copilot-scripts',
+        matches: ['https://copilot.cloud.microsoft/*'],
+      },
+      frameRule: { id: 1006 },
+    });
   });
 
   it('places each provider-specific Enter behavior script explicitly in registration order', () => {
@@ -106,6 +122,18 @@ describe('optional provider access', () => {
       'content-scripts/text-injection-all-providers.js',
       'content-scripts/focus-toggle.js',
     ]);
+    for (const [id, script] of [
+      ['meta-ai', 'content-scripts/enter-behavior-meta-ai.js'],
+      ['copilot', 'content-scripts/enter-behavior-copilot.js'],
+    ]) {
+      expect(OPTIONAL_PROVIDER_CONFIGS[id].contentScript.js).toEqual([
+        'content-scripts/button-finder-utils.js',
+        'content-scripts/enter-behavior-utils.js',
+        script,
+        'content-scripts/text-injection-all-providers.js',
+        'content-scripts/focus-toggle.js',
+      ]);
+    }
   });
 
   it('requests only the selected provider origin', async () => {
@@ -172,6 +200,8 @@ describe('optional provider access', () => {
       'chatglm',
       'zai-global',
       'yuanbao',
+      'meta-ai',
+      'copilot',
     ])).resolves.toEqual(['chatgpt', 'qwen-global']);
   });
 

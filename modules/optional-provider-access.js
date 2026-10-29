@@ -80,6 +80,24 @@ export const OPTIONAL_PROVIDER_CONFIGS = Object.freeze({
       ['https://yuanbao.tencent.com/*'],
       'content-scripts/enter-behavior-yuanbao.js'
     ))
+  }),
+  'meta-ai': Object.freeze({
+    origins: Object.freeze(['https://meta.ai/*']),
+    contentScript: Object.freeze(createContentScript(
+      'meta-ai-scripts',
+      ['https://meta.ai/*'],
+      'content-scripts/enter-behavior-meta-ai.js'
+    )),
+    frameRule: Object.freeze(createFrameRule(1005, 'https://meta.ai/*'))
+  }),
+  copilot: Object.freeze({
+    origins: Object.freeze(['https://copilot.cloud.microsoft/*']),
+    contentScript: Object.freeze(createContentScript(
+      'copilot-scripts',
+      ['https://copilot.cloud.microsoft/*'],
+      'content-scripts/enter-behavior-copilot.js'
+    )),
+    frameRule: Object.freeze(createFrameRule(1006, 'https://copilot.cloud.microsoft/*'))
   })
 });
 

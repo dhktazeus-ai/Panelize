@@ -173,6 +173,17 @@
       'textarea[placeholder="How can I help you today?"]',
       'textarea.input-scroll'
     ],
+    'meta-ai': [
+      'input[aria-label="Ask Meta AI"]',
+      'textarea[aria-label="Ask Meta AI"]',
+      'input[placeholder^="Ask Meta AI"]',
+      'textarea[placeholder^="Ask Meta AI"]'
+    ],
+    copilot: [
+      'textarea#unauth-prompt-input',
+      'textarea[aria-label="input"]',
+      'textarea[placeholder*="Copilot"]'
+    ],
     yuanbao: [
       '.chat-command-editor-specail .ql-editor[contenteditable="true"]',
       '.ql-editor[contenteditable="true"][data-placeholder]'
@@ -333,6 +344,13 @@
       '#yuanbao-send-btn[aria-label="Send"]',
       '#yuanbao-send-btn'
     ],
+    'meta-ai': [
+      'button[aria-label="Send"]'
+    ],
+    copilot: [
+      '#unauth-prompt-submit[aria-label="Send"]',
+      '[role="button"][aria-label="Send"]'
+    ],
     google: [
       'button[data-xid="input-plate-send-button"]',
       'button[aria-label="Send"]',
@@ -407,6 +425,8 @@
       'button[aria-label="New Chat"]',
       'button.navNewChat'
     ],
+    'meta-ai': [],
+    copilot: [],
     yuanbao: [
       '[role="button"][aria-label="New Chat"]',
       '.yb-new-chat-entry__item[aria-label="New Chat"]',
@@ -436,6 +456,8 @@
     'zai-global': 'https://chat.z.ai/',
     // Keep this in sync with YUANBAO_DEFAULT_URL in modules/providers.js.
     yuanbao: 'https://yuanbao.tencent.com/chat/naQivTmsDa',
+    'meta-ai': 'https://meta.ai/',
+    copilot: 'https://copilot.cloud.microsoft/',
     google: 'https://www.google.com/search?udm=50'
   };
 
@@ -487,6 +509,10 @@
       return 'zai-global';
     } else if (hostname === 'yuanbao.tencent.com') {
       return 'yuanbao';
+    } else if (hostname === 'meta.ai') {
+      return 'meta-ai';
+    } else if (hostname === 'copilot.cloud.microsoft') {
+      return 'copilot';
     } else if (hostname.includes('google.com') || hostname.includes('google.') || hostname === 'www.google.com') {
       // Google Search / AI Mode
       // Always return 'google' for any google.com page

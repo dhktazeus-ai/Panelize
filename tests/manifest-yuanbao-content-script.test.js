@@ -8,6 +8,8 @@ const manifest = JSON.parse(
 
 describe.each([
   ['Yuanbao', 'yuanbao.tencent.com', 'https://yuanbao.tencent.com/*'],
+  ['Meta AI', 'meta.ai', 'https://meta.ai/*'],
+  ['Copilot', 'copilot.cloud.microsoft', 'https://copilot.cloud.microsoft/*'],
 ])('%s manifest permission coverage', (_name, host, origin) => {
   it('declares only an optional host permission', () => {
     expect(manifest.optional_host_permissions).toContain(origin);

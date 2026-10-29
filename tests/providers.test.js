@@ -14,7 +14,7 @@ describe('providers module', () => {
 
   describe('PROVIDERS constant', () => {
     it('should contain all expected providers', () => {
-      expect(PROVIDERS).toHaveLength(13);
+      expect(PROVIDERS).toHaveLength(15);
       const providerIds = PROVIDERS.map((p) => p.id);
       expect(providerIds).toEqual([
         'chatgpt',
@@ -30,6 +30,8 @@ describe('providers module', () => {
         'chatglm',
         'zai-global',
         'yuanbao',
+        'meta-ai',
+        'copilot',
       ]);
     });
 
@@ -63,6 +65,18 @@ describe('providers module', () => {
         url: 'https://yuanbao.tencent.com/chat/naQivTmsDa',
         icon: '/icons/providers/yuanbao.png',
         optionalOrigins: ['https://yuanbao.tencent.com/*'],
+      });
+      expect(getProviderById('meta-ai')).toMatchObject({
+        name: 'Meta AI',
+        url: 'https://meta.ai/',
+        icon: '/icons/providers/meta-ai.png',
+        optionalOrigins: ['https://meta.ai/*'],
+      });
+      expect(getProviderById('copilot')).toMatchObject({
+        name: 'Copilot',
+        url: 'https://copilot.cloud.microsoft/',
+        icon: '/icons/providers/copilot.png',
+        optionalOrigins: ['https://copilot.cloud.microsoft/*'],
       });
     });
 

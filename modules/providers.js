@@ -128,6 +128,26 @@ export const PROVIDERS = [
     iconDark: '/icons/providers/dark/yuanbao.png',
     enabled: true,
     optionalOrigins: OPTIONAL_PROVIDER_CONFIGS.yuanbao.origins
+  },
+  {
+    id: 'meta-ai',
+    name: 'Meta AI',
+    url: 'https://meta.ai/',
+    topLevelUrl: 'https://meta.ai/',
+    icon: '/icons/providers/meta-ai.png',
+    iconDark: '/icons/providers/dark/meta-ai.png',
+    enabled: true,
+    optionalOrigins: OPTIONAL_PROVIDER_CONFIGS['meta-ai'].origins
+  },
+  {
+    id: 'copilot',
+    name: 'Copilot',
+    url: 'https://copilot.cloud.microsoft/',
+    topLevelUrl: 'https://copilot.cloud.microsoft/',
+    icon: '/icons/providers/copilot.png',
+    iconDark: '/icons/providers/dark/copilot.png',
+    enabled: true,
+    optionalOrigins: OPTIONAL_PROVIDER_CONFIGS.copilot.origins
   }
 ];
 

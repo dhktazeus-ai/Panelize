@@ -21,6 +21,9 @@ describe('provider open URL helpers', () => {
     expect(isProviderCurrentUrl('chatglm', 'https://chatglm.cn/main/alltoolsdetail?lang=zh&cid=abc123')).toBe(true);
     expect(isProviderCurrentUrl('zai-global', 'https://chat.z.ai/c/abc123')).toBe(true);
     expect(isProviderCurrentUrl('yuanbao', 'https://yuanbao.tencent.com/chat/agent123/chat456')).toBe(true);
+    expect(isProviderCurrentUrl('meta-ai', 'https://meta.ai/')).toBe(true);
+    expect(isProviderCurrentUrl('copilot', 'https://copilot.cloud.microsoft/')).toBe(true);
+    expect(isProviderCurrentUrl('copilot', 'https://copilot.cloud.microsoft/chats/abc')).toBe(true);
   });
 
   it('accepts current Google pages for both AI Mode and Search', () => {
@@ -54,6 +57,9 @@ describe('provider open URL helpers', () => {
       'https://yuanbao.tencent.com/chat/agent123/chat456?chatMode=temp'
     )).toBe(false);
     expect(isProviderAllowedUrl('yuanbao', 'https://evil.example/chat/agent123/chat456')).toBe(false);
+    expect(isProviderCurrentUrl('meta-ai', 'https://evil.meta.ai/')).toBe(false);
+    expect(isProviderCurrentUrl('copilot', 'https://copilot.microsoft.com/')).toBe(false);
+    expect(isProviderAllowedUrl('copilot', 'http://copilot.cloud.microsoft/')).toBe(false);
   });
 
   it('opens the reported current URL when it is valid', () => {
@@ -72,6 +78,10 @@ describe('provider open URL helpers', () => {
     expect(getProviderOpenUrl(getProviderById('zai-global'), 'https://z.ai/chat')).toBe('https://chat.z.ai/');
     expect(getProviderOpenUrl(getProviderById('yuanbao'), 'https://yuanbao.tencent.com/chat/naQivTmsDa')).toBe(
       'https://yuanbao.tencent.com/chat/naQivTmsDa'
+    );
+    expect(getProviderOpenUrl(getProviderById('meta-ai'), 'https://meta.ai/')).toBe('https://meta.ai/');
+    expect(getProviderOpenUrl(getProviderById('copilot'), 'https://copilot.cloud.microsoft/chats/abc')).toBe(
+      'https://copilot.cloud.microsoft/chats/abc'
     );
   });
 });

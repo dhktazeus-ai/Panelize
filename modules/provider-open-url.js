@@ -13,7 +13,9 @@ const PROVIDER_ALLOWED_HOSTS = {
   'qwen-global': new Set(['chat.qwen.ai']),
   chatglm: new Set(['chatglm.cn']),
   'zai-global': new Set(['chat.z.ai']),
-  yuanbao: new Set(['yuanbao.tencent.com'])
+  yuanbao: new Set(['yuanbao.tencent.com']),
+  'meta-ai': new Set(['meta.ai']),
+  copilot: new Set(['copilot.cloud.microsoft'])
 };
 
 const QWEN_GLOBAL_NON_CONVERSATION_IDS = new Set(['new-chat', 'new-branch', 'guest']);
@@ -64,6 +66,9 @@ export function isProviderCurrentUrl(providerId, rawUrl) {
   }
 
   switch (providerId) {
+    case 'meta-ai':
+    case 'copilot':
+      return true;
     case 'chatgpt':
       return url.pathname.startsWith('/c/') && url.searchParams.get('temporary-chat') !== 'true';
     case 'claude':

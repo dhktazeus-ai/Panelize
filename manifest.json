@@ -37,7 +37,9 @@
     "https://auth.qwen.ai/*",
     "https://chatglm.cn/*",
     "https://chat.z.ai/*",
-    "https://yuanbao.tencent.com/*"
+    "https://yuanbao.tencent.com/*",
+    "https://meta.ai/*",
+    "https://copilot.cloud.microsoft/*"
   ],
   "background": {
     "service_worker": "background/service-worker.js",
