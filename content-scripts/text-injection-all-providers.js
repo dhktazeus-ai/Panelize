@@ -97,7 +97,7 @@
   const YUANBAO_TEMP_CHAT_CLICK_COOLDOWN_MS = 5000;
   const IMAGE_UPLOAD_PREVIEW_TIMEOUT_MS = 6000;
   const SLOW_COMPOSER_PROVIDERS = new Set([
-    'deepseek', 'kimi', 'doubao', 'chatglm', 'zai-global', 'yuanbao'
+    'deepseek', 'kimi', 'doubao', 'chatglm', 'zai-global', 'yuanbao', 'meta-ai', 'copilot'
   ]);
   const IMAGE_INJECTION_REASONS = Object.freeze({
     CONTROL_NOT_FOUND: 'control-not-found',
