@@ -1,4 +1,8 @@
-function createContentScript(id, matches, enterBehaviorScript) {
+// Meta AI and Microsoft 365 Copilot render their signed-in composer with Lexical,
+// which the shared injector cannot drive; this script handles those editors.
+const LEXICAL_COMPOSER_SCRIPTS = Object.freeze(['content-scripts/lexical-composer-send.js']);
+
+function createContentScript(id, matches, enterBehaviorScript, extraScripts = []) {
   return {
     id,
     matches,
@@ -7,6 +11,7 @@ function createContentScript(id, matches, enterBehaviorScript) {
       'content-scripts/enter-behavior-utils.js',
       enterBehaviorScript,
       'content-scripts/text-injection-all-providers.js',
+      ...extraScripts,
       'content-scripts/focus-toggle.js'
     ],
     runAt: 'document_start',
@@ -86,7 +91,8 @@ export const OPTIONAL_PROVIDER_CONFIGS = Object.freeze({
     contentScript: Object.freeze(createContentScript(
       'meta-ai-scripts',
       ['https://meta.ai/*'],
-      'content-scripts/enter-behavior-meta-ai.js'
+      'content-scripts/enter-behavior-meta-ai.js',
+      LEXICAL_COMPOSER_SCRIPTS
     )),
     frameRule: Object.freeze(createFrameRule(1005, 'https://meta.ai/*'))
   }),
@@ -95,7 +101,8 @@ export const OPTIONAL_PROVIDER_CONFIGS = Object.freeze({
     contentScript: Object.freeze(createContentScript(
       'copilot-scripts',
       ['https://copilot.cloud.microsoft/*'],
-      'content-scripts/enter-behavior-copilot.js'
+      'content-scripts/enter-behavior-copilot.js',
+      LEXICAL_COMPOSER_SCRIPTS
     )),
     frameRule: Object.freeze(createFrameRule(1006, 'https://copilot.cloud.microsoft/*'))
   })
@@ -195,6 +202,30 @@ async function syncContentScripts(allConfigs, desiredConfigs) {
   if (scriptsToRegister.length > 0) {
     await chrome.scripting.registerContentScripts(scriptsToRegister);
   }
+
+  // Registrations persist across sessions, so refresh any whose script list or
+  // match patterns changed in an extension update.
+  const registeredById = new Map(registeredScripts.map((script) => [script.id, script]));
+  const scriptsToUpdate = desiredConfigs
+    .map(({ contentScript }) => contentScript)
+    .filter((script) => isContentScriptOutdated(registeredById.get(script.id), script));
+
+  if (scriptsToUpdate.length > 0 && chrome.scripting.updateContentScripts) {
+    await chrome.scripting.updateContentScripts(scriptsToUpdate);
+  }
+}
+
+function hasSameEntries(left = [], right = []) {
+  return left.length === right.length && left.every((value, index) => value === right[index]);
+}
+
+function isContentScriptOutdated(registered, desired) {
+  if (!registered) {
+    return false;
+  }
+  return !hasSameEntries(registered.js, desired.js) ||
+    !hasSameEntries(registered.matches, desired.matches) ||
+    Boolean(registered.allFrames) !== Boolean(desired.allFrames);
 }
 
 async function syncFrameRules(allConfigs, desiredConfigs) {

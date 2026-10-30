@@ -1,13 +1,18 @@
 // Meta AI Enter/Shift+Enter behavior swap
 // Depends on enter-behavior-utils.js and button-finder-utils.js.
 
+// Signed-in Meta AI uses a Lexical contenteditable composer; the plain input is
+// the signed-out landing composer.
 const META_AI_INPUT_SELECTORS = [
+  '[data-testid="composer-input"][contenteditable="true"]',
+  'textarea[data-testid="composer-input"]',
   'input[aria-label="Ask Meta AI"]',
   'textarea[aria-label="Ask Meta AI"]',
   'input[placeholder^="Ask Meta AI"]',
   'textarea[placeholder^="Ask Meta AI"]'
 ];
 const META_AI_SEND_BUTTON_SELECTORS = [
+  { type: 'css', value: 'button[data-testid="composer-send-button"]' },
   { type: 'css', value: 'button[aria-label="Send"]' }
 ];
 
@@ -22,6 +27,24 @@ function isMetaAIInput(element) {
 function insertMetaAINewline(textarea) {
   textarea.setRangeText('\n', textarea.selectionStart, textarea.selectionEnd, 'end');
   textarea.dispatchEvent(new Event('input', { bubbles: true }));
+}
+
+function insertMetaAIEditorLineBreak(editor) {
+  // Lexical handles Shift+Enter as a line break; this synthetic event is not
+  // trusted, so the swap handler below ignores it.
+  const shiftEnter = new KeyboardEvent('keydown', {
+    key: 'Enter',
+    code: 'Enter',
+    keyCode: 13,
+    which: 13,
+    shiftKey: true,
+    bubbles: true,
+    cancelable: true
+  });
+  const handled = !editor.dispatchEvent(shiftEnter);
+  if (!handled) {
+    document.execCommand('insertLineBreak');
+  }
 }
 
 function handleMetaAIEnterSwap(event) {
@@ -39,6 +62,10 @@ function handleMetaAIEnterSwap(event) {
       event.preventDefault();
       event.stopImmediatePropagation();
       insertMetaAINewline(input);
+    } else if (input.isContentEditable && !event.shiftKey) {
+      event.preventDefault();
+      event.stopImmediatePropagation();
+      insertMetaAIEditorLineBreak(input);
     }
     return;
   }
